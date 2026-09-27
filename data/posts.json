@@ -5,7 +5,8 @@
     "category": "Finance",
     "snippet": "If you didn't go to Harvard, Wharton, or Stanford, resume drops through headhunters won't get you far.",
     "author": "Sarah Chen",
-    "createdAt": "2026-09-19T00:00:00.000Z"
+    "createdAt": "2026-09-19T00:00:00.000Z",
+    "factChecked": true
   },
   {
     "id": 2,
@@ -13,6 +14,19 @@
     "category": "Sales",
     "snippet": "Buyers are drowning in automated emails. The only outbound that still converts is 1:1 account research.",
     "author": "Julian Hayes",
-    "createdAt": "2026-09-17T00:00:00.000Z"
+    "createdAt": "2026-09-17T00:00:00.000Z",
+    "factChecked": true
+  },
+  {
+    "id": 3,
+    "title": "Building Financial Models That Survive Board Scrutiny",
+    "category": "Finance",
+    "snippet": "A financial model isn't a spreadsheet — it's an argument. Every assumption should be defensible in a single sentence, with the source cited right next to it.",
+    "author": "Marcus Vance",
+    "createdAt": "2026-09-09T00:00:00.000Z",
+    "factChecked": true,
+    "aiAssisted": true,
+    "sources": "Standard financial-modeling guides; reviewed by a human editor.",
+    "url": "post-financial-models.html"
   }
 ]
