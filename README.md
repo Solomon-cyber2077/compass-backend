@@ -1,6 +1,6 @@
 # The Compass
 
-A Reddit-style career Q&A site inspired by *Absolute Regression*: the way the main character enters the trial and finds notes left behind by past successors. Here, people ask career questions and **Temporary Mentors (TMs)**, people with real first-hand experience, leave notes answering them. The goal is straight answers fast, instead of waiting weeks on LinkedIn.
+A Reddit-style career Q&A site. Here, people ask career questions and **Temporary Mentors (TMs)**, people with real first-hand experience, leave notes answering them. The goal is straight answers fast, instead of waiting weeks on LinkedIn.
 
 ## What it does
 
