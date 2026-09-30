@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account · The Compass</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./">
+        <svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="16" cy="16" r="13"/>
+          <path d="M16 3v3M16 26v3M3 16h3M26 16h3" stroke-linecap="round"/>
+          <path d="M20.5 11.5 18 18l-6.5 2.5L14 14z" fill="currentColor" fill-opacity=".25" stroke-linejoin="round"/>
+        </svg>
+        The Compass
+      </a>
+      <nav class="header-nav" aria-label="Main">
+        <a href="./" class="hide-sm">Archive</a>
+        <span id="account-slot"></span>
+        <a class="btn btn-primary" href="ask.html">Ask</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page narrow">
+    <section id="loading"><div class="skeleton"></div></section>
+
+    <!-- Signed out -->
+    <section id="signed-out" hidden>
+      <div class="card form-card">
+        <div class="tabs auth-tabs" role="group" aria-label="Account">
+          <button type="button" class="tab" id="tab-login" aria-pressed="true">Sign in</button>
+          <button type="button" class="tab" id="tab-register" aria-pressed="false">Create account</button>
+        </div>
+
+        <form id="login-form" novalidate>
+          <h2>Welcome back</h2>
+          <p>Sign in to ask questions, leave notes, and upvote.</p>
+          <div class="field">
+            <label for="login-username">Username</label>
+            <input id="login-username" class="input" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" class="input" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="button" class="btn btn-quiet" id="show-forgot">Forgot password?</button>
+            <p class="error" id="login-error" role="alert"></p>
+          </div>
+        </form>
+
+        <form id="forgot-form" novalidate hidden>
+          <h2>Reset your password</h2>
+          <p id="forgot-intro">Enter your username or the email on your account and we'll send you a reset link.</p>
+          <div class="field">
+            <label for="forgot-login">Username or email</label>
+            <input id="forgot-login" class="input" autocomplete="username" required>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Send reset link</button>
+            <button type="button" class="btn btn-quiet" id="hide-forgot">Back to sign in</button>
+          </div>
+          <p class="notice" id="forgot-result" role="status"></p>
+        </form>
+
+        <form id="register-form" novalidate hidden>
+          <h2>Enter the trial</h2>
+          <p>Create an account to ask questions and leave notes for those who come after you.</p>
+          <div class="field">
+            <label for="reg-display">Display name <span class="hint">(shown on your posts)</span></label>
+            <input id="reg-display" class="input" maxlength="40" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="reg-username">Username <span class="hint">(3–20 letters, numbers, or _)</span></label>
+            <input id="reg-username" class="input" maxlength="20" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="reg-email">Email <span class="hint">(optional, never shown; for password resets and answer alerts)</span></label>
+            <input id="reg-email" class="input" type="email" maxlength="200" autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="reg-password">Password <span class="hint">(at least 8 characters)</span></label>
+            <input id="reg-password" class="input" type="password" autocomplete="new-password" required>
+          </div>
+          <!-- Trap for spam bots: people never see or fill this in -->
+          <div class="hp" aria-hidden="true">
+            <label for="reg-website">Website</label>
+            <input id="reg-website" tabindex="-1" autocomplete="off">
+          </div>
+          <p class="fine-print">By creating an account you agree to the <a href="guidelines.html">community guidelines</a>.</p>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create account</button>
+            <p class="error" id="register-error" role="alert"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Signed in -->
+    <section id="signed-in" class="stack" hidden>
+      <div class="card form-card profile">
+        <div>
+          <h2 id="profile-name"></h2>
+          <p id="profile-meta"></p>
+        </div>
+        <div class="form-actions">
+          <a class="btn" id="profile-link" href="profile.html">Public profile</a>
+          <button type="button" class="btn" id="logout">Sign out</button>
+        </div>
+      </div>
+
+      <div class="card form-card" id="tm-card">
+        <h2>Temporary Mentor verification</h2>
+        <div id="tm-status"></div>
+
+        <form id="tm-form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="tm-role">Current or most recent role</label>
+              <input id="tm-role" class="input" maxlength="80" placeholder="e.g. PE Associate at a mid-market fund">
+            </div>
+            <div class="field">
+              <label for="tm-years">Years of experience in the field</label>
+              <input id="tm-years" class="input" type="number" min="1" max="60" step="1" inputmode="numeric">
+            </div>
+          </div>
+          <div class="field">
+            <label for="tm-proof">Proof link <span class="hint">(LinkedIn profile, company bio, portfolio: something a reviewer can check; only admins see it)</span></label>
+            <input id="tm-proof" class="input" type="url" placeholder="https://www.linkedin.com/in/…">
+          </div>
+          <div class="field">
+            <label for="tm-about">Your experience <span class="hint">(what you've done and what you can help with; shown on your profile once approved)</span></label>
+            <textarea id="tm-about" class="textarea short" maxlength="1000"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="tm-submit">Submit application</button>
+            <p class="error" id="tm-error" role="alert"></p>
+          </div>
+        </form>
+      </div>
+
+      <form class="card form-card" id="settings-form" novalidate>
+        <h2>Settings</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="set-display">Display name</label>
+            <input id="set-display" class="input" maxlength="40" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="set-email">Email <span class="hint">(never shown publicly)</span></label>
+            <input id="set-email" class="input" type="email" maxlength="200" autocomplete="email">
+          </div>
+        </div>
+        <div class="field">
+          <label class="check">
+            <input type="checkbox" id="set-notify">
+            <span>Email me when someone leaves a note on my question</span>
+          </label>
+          <span class="hint" id="email-off-hint" hidden>Email isn't set up on this site yet, so notifications only appear under the bell for now.</span>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save settings</button>
+          <p class="notice" id="settings-result" role="status"></p>
+          <p class="error" id="settings-error" role="alert"></p>
+        </div>
+      </form>
+
+      <form class="card form-card" id="password-form" novalidate>
+        <h2>Change password</h2>
+        <p>Changing your password signs you out on every other device.</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="pw-current">Current password</label>
+            <input id="pw-current" class="input" type="password" autocomplete="current-password">
+          </div>
+          <div class="field">
+            <label for="pw-new">New password <span class="hint">(at least 8 characters)</span></label>
+            <input id="pw-new" class="input" type="password" autocomplete="new-password">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Change password</button>
+          <p class="notice" id="pw-result" role="status"></p>
+          <p class="error" id="pw-error" role="alert"></p>
+        </div>
+      </form>
+
+      <form class="card form-card danger-zone" id="delete-form" novalidate>
+        <h2>Delete account</h2>
+        <p>This removes your account, email, settings, and upvotes for good. Your questions and notes stay so conversations still make sense, but show as "[deleted]". To remove them too, delete them one by one first.</p>
+        <div class="decision">
+          <input id="delete-password" class="input" type="password" autocomplete="current-password" placeholder="Your password" aria-label="Your password">
+          <button type="submit" class="btn">Delete my account</button>
+        </div>
+        <p class="error" id="delete-error" role="alert"></p>
+      </form>
+
+      <div class="card form-card" id="admin-card" hidden>
+        <h2>Review TM applications</h2>
+        <p>Check each proof link before approving. Approved mentors get the TM badge on all their notes.</p>
+        <div id="applications" class="applications"></div>
+      </div>
+
+      <div class="card form-card" id="reports-card" hidden>
+        <h2>Reported content</h2>
+        <p>Delete anything that breaks the guidelines; dismiss reports that don't.</p>
+        <div id="reports" class="applications"></div>
+      </div>
+
+      <form class="card form-card" id="backup-card" novalidate hidden>
+        <h2>Backups</h2>
+        <p>Download everything (questions, notes, accounts, notifications, reports) as one file, or restore the site from a backup, for example after moving to a new database. The daily GitHub backups are encrypted; enter their passphrase to restore one.</p>
+        <div class="form-actions">
+          <a class="btn" href="/api/admin/backup" download>Download backup</a>
+        </div>
+        <div class="field restore-fields">
+          <label for="restore-file">Restore from a backup file <span class="hint">(.json, or .json.enc from GitHub)</span></label>
+          <input id="restore-file" type="file" accept=".json,.enc,application/json">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="restore-passphrase">Passphrase <span class="hint">(only for encrypted backups)</span></label>
+            <input id="restore-passphrase" class="input" type="password" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="restore-confirm">Type RESTORE to confirm <span class="hint">(replaces all current content)</span></label>
+            <input id="restore-confirm" class="input" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Restore</button>
+          <p class="notice" id="restore-result" role="status"></p>
+          <p class="error" id="restore-error" role="alert"></p>
+        </div>
+      </form>
+
+      <form class="card form-card" id="reset-link-form" novalidate hidden>
+        <h2>Password reset link</h2>
+        <p>For members who can't get a reset email. Make a link, then send it to them privately. It works once, for 24 hours.</p>
+        <div class="decision">
+          <input id="reset-username" class="input" placeholder="Their username" aria-label="Username">
+          <button type="submit" class="btn btn-primary">Make link</button>
+        </div>
+        <p class="error" id="reset-link-error" role="alert"></p>
+        <div class="copy-row" id="reset-link-result" hidden>
+          <input id="reset-link-url" class="input" readonly aria-label="Reset link">
+          <button type="button" class="btn" id="copy-reset-link">Copy</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">The Compass · Notes for those who come after. · <a href="guidelines.html">Guidelines &amp; privacy</a></footer>
+
+  <script src="common.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
