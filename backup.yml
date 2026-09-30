@@ -1,0 +1,35 @@
+name: Daily backup
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download and encrypt the backup
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          BACKUP_TOKEN: ${{ secrets.BACKUP_TOKEN }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$SITE_URL" ] || [ -z "$BACKUP_TOKEN" ] || [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "SITE_URL, BACKUP_TOKEN and BACKUP_PASSPHRASE must all be set; skipping backup."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 300 \
+            -H "Authorization: Bearer $BACKUP_TOKEN" \
+            "${SITE_URL%/}/api/admin/backup" -o backup.json
+          openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -salt \
+            -in backup.json -out compass-backup.json.enc -pass env:BACKUP_PASSPHRASE
+          rm backup.json
+
+      - name: Keep the encrypted backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: compass-backup-${{ github.run_number }}
+          path: compass-backup.json.enc
+          retention-days: 90
+          if-no-files-found: ignore
