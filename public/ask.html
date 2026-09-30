@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ask a Question · The Compass</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./">
+        <svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="16" cy="16" r="13"/>
+          <path d="M16 3v3M16 26v3M3 16h3M26 16h3" stroke-linecap="round"/>
+          <path d="M20.5 11.5 18 18l-6.5 2.5L14 14z" fill="currentColor" fill-opacity=".25" stroke-linejoin="round"/>
+        </svg>
+        The Compass
+      </a>
+      <nav class="header-nav" aria-label="Main">
+        <a href="./" class="hide-sm">Archive</a>
+        <span id="account-slot"></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page narrow">
+    <section>
+      <a class="back" href="./">← Back to the archive</a>
+      <div id="signin-gate" class="card form-card" hidden>
+        <h2>Sign in to ask a question</h2>
+        <p>Every question is tied to an account so Temporary Mentors know who they're helping. It takes a few seconds.</p>
+        <a class="btn btn-primary" id="signin-link" href="account.html">Sign in or create an account</a>
+      </div>
+
+      <form id="ask-form" class="card form-card spaced" novalidate hidden>
+        <h2>Ask a question</h2>
+        <p>Temporary Mentors answer faster when you're specific: your field, your level, and what you've already tried.</p>
+        <p class="posting-as" id="posting-as"></p>
+
+        <div class="field">
+          <label for="title">Question</label>
+          <input id="title" class="input" maxlength="200" required placeholder="e.g. How do I move from audit into FP&amp;A within a year?">
+          <span class="counter" id="title-count"></span>
+        </div>
+
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" class="select" required>
+            <option value="">Choose one…</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="body">Details</label>
+          <textarea id="body" class="textarea" maxlength="10000" required placeholder="Background, what you've tried, and what a good answer would help you decide."></textarea>
+          <span class="counter" id="body-count"></span>
+        </div>
+
+        <div class="field">
+          <span class="label">Photos <span class="hint">(optional, up to 4, e.g. a job posting or your résumé with personal details hidden)</span></span>
+          <div id="images"></div>
+        </div>
+
+        <div class="field">
+          <label for="links">Links <span class="hint">(optional, one per line, up to 5)</span></label>
+          <textarea id="links" class="textarea short" placeholder="https://www.example.com/job-posting"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit">Post question</button>
+          <p class="error" id="error" role="alert"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">The Compass · Notes for those who come after. · <a href="guidelines.html">Guidelines &amp; privacy</a></footer>
+
+  <script src="common.js"></script>
+  <script src="ask.js"></script>
+</body>
+</html>
