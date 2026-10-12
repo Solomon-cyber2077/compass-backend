@@ -121,6 +121,56 @@ All changes must be sent as JSON (`Content-Type: application/json`). Signing in 
 | GET | `/api/admin/backup` | admin, or `Authorization: Bearer BACKUP_TOKEN` | full backup as JSON |
 | POST | `/api/admin/restore` | admin | `{ backup, confirm: "RESTORE" }` (up to 100 MB) |
 
+### Try it with curl
+
+With the server running (`npm install`, then `npm start`, which listens on http://localhost:3001), you can sign up, ask a question and leave a note from the terminal. Run the calls in order: each one uses the session cookie from the step before it. Replace the sample `id` in step 3 with the `id` from step 2's response.
+
+**1. Sign up.** `-c cookies.txt` saves the session cookie, so you're signed in straight away. Usernames are 3–20 letters, numbers, or underscores, and passwords need at least 8 characters. `email` is optional.
+
+```bash
+curl -c cookies.txt -X POST http://localhost:3001/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"jane_doe","displayName":"Jane Doe","password":"a-long-password"}'
+```
+
+Returns `201 Created` with your account (trimmed; your `id` and timestamps will differ):
+
+```json
+{"user":{"id":1791823068922173,"username":"jane_doe","displayName":"Jane Doe","email":"","emailNotifications":true,"isAdmin":false,"tm":{"status":"none"}}}
+```
+
+Don't send a `website` field. The sign-up form has a hidden field with that name to catch bots, and a request that includes it is rejected with `400`.
+
+**2. Post a question.** `-b cookies.txt` sends the cookie back. `category` must be one of `Finance`, `Sales`, `Tech`, `Marketing`, `Consulting`, `Law`, `Healthcare`, `Engineering`, `Design`, `Career Change`, `Interviews`, or `Other`. `images` and `links` are optional.
+
+```bash
+curl -b cookies.txt -X POST http://localhost:3001/api/posts \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Is a career change at 35 realistic?","category":"Career Change","body":"I have spent ten years in accounting and want to move into product design."}'
+```
+
+Returns `201 Created` with the new question (trimmed). Its `id` is the number you need in step 3:
+
+```json
+{"id":1791823068941425,"title":"Is a career change at 35 realistic?","category":"Career Change","authorUsername":"jane_doe","votes":0,"responses":[]}
+```
+
+**3. Post a note** (an answer) on that question. Put the question's `id` in the path:
+
+```bash
+curl -b cookies.txt -X POST http://localhost:3001/api/posts/1791823068941425/responses \
+  -H "Content-Type: application/json" \
+  -d '{"body":"Yes. I made the switch at 36 by building a portfolio on weekends first."}'
+```
+
+Returns `201 Created` with the note (trimmed), including `"isTM": false` and `"accepted": false`.
+
+**Things to know**
+
+- **New accounts have daily limits.** For their first 7 days, accounts can post 5 questions and 20 notes a day. Going over returns `429` with a message such as `New accounts can post 5 questions a day for their first week. Try again tomorrow.` After the first week, the limit no longer applies.
+- **Requests are rate-limited per IP address.** Sign-up, sign-in and password calls share a limit of 20 requests every 10 minutes, and posting has its own limit of 20 in that window. Going over returns `429`.
+- **Posting without a session cookie** (for example, omitting `-b cookies.txt`) returns `401` with `{"error":"Sign in first."}`.
+
 ## Possible next steps
 
 - Photos are stored inside the database record. That's fine for a small site; at larger scale, move them to object storage (e.g. Cloudinary or S3).
