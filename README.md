@@ -2,7 +2,7 @@
 
 A Reddit-style career Q&A site inspired by *Absolute Regression*: the way the main character enters the trial and finds notes left behind by past successors. Here, people ask career questions and **Temporary Mentors (TMs)**, people with real first-hand experience, leave notes answering them. The goal is straight answers fast, instead of waiting weeks on LinkedIn.
 
-**Open source:** this repository is public and released under the [MIT License](LICENSE). Contributions are welcome; start with the [contributor guide](CONTRIBUTING.md).
+**License:** use-only. You may download and run The Compass; you may not modify or redistribute it. See [LICENSE](LICENSE).
 
 ## What it does
 
@@ -125,6 +125,6 @@ All changes must be sent as JSON (`Content-Type: application/json`). Signing in 
 
 - Photos are stored inside the database record. That's fine for a small site; at larger scale, move them to object storage (e.g. Cloudinary or S3).
 
-## Contributing and license
+## License
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to report bugs, suggest features, and send pull requests. The Compass is released under the [MIT License](LICENSE).
+Use-only: you may download and run The Compass, but not modify or redistribute it. See [LICENSE](LICENSE).
